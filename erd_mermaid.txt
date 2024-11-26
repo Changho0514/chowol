@@ -1,0 +1,108 @@
+erDiagram
+    MEMBERS ||--o{ CALENDARS : owns
+    MEMBERS ||--o{ SCHEDULES : creates
+    MEMBERS ||--o{ BUCKET_LISTS : manages
+    MEMBERS ||--o{ DIARIES : writes
+    MEMBERS ||--o{ NOTIFICATIONS : receives
+    MEMBERS {
+        int member_id PK
+        string nickname
+        string email
+        string oauth_provider
+        datetime created_at
+        boolean is_active
+    }
+
+    COUPLES ||--|| MEMBERS : connects
+    COUPLES {
+        int couple_id PK
+        int user1_id FK
+        int user2_id FK
+        datetime connected_at
+        boolean is_active
+        datetime anniversary_date
+    }
+
+    CALENDARS ||--o{ SCHEDULES : contains
+    CALENDARS {
+        int calendar_id PK
+        int user_id FK
+        string title
+        enum visibility "private/shared/partner_private"
+        datetime created_at
+    }
+
+    SCHEDULES {
+        int schedule_id PK
+        int calendar_id FK
+        string title
+        datetime start_time
+        datetime end_time
+        string description
+        string category
+        string emoji
+        boolean is_holiday
+    }
+
+    BUCKET_LISTS {
+        int bucket_id PK
+        int user_id FK
+        string title
+        string category
+        string content
+        enum status
+        datetime created_at
+        datetime updated_at
+    }
+
+    DAILY_QUESTIONS ||--o{ DAILY_ANSWERS : has
+    DAILY_QUESTIONS {
+        int question_id PK
+        string question_text
+        date question_date
+    }
+
+    DAILY_ANSWERS {
+        int answer_id PK
+        int question_id FK
+        int user_id FK
+        string content
+        string emoji
+        string reply
+        datetime created_at
+    }
+
+    DIARIES {
+        int diary_id PK
+        int user_id FK
+        string title
+        text content
+        enum emotion
+        string weather
+        string[] photos
+        datetime created_at
+    }
+
+    COUPLE_QUESTION_STATUSES {
+        int couple_id FK "PK,FK"
+        int question_id FK "PK,FK"
+        int user_id FK "PK,FK"
+        boolean answered
+    }
+
+    NOTIFICATIONS {
+        int notification_id PK
+        int user_id FK
+        string message
+        boolean read_status
+        enum type
+        datetime created_at
+    }
+
+    HOLIDAYS {
+        int holiday_id PK
+        string name
+        date date
+        boolean is_lunar
+        boolean is_anniversary
+    }
